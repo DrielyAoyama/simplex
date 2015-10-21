@@ -161,9 +161,16 @@ $conteudo=$conteudo.
 <br><br>
 <form style="text-align:center;" action="quadros.php" method="GET"  class="form-horizontal">
 <fieldset>
+
 <!-- Button -->
 <div class="form-group">
+    <label class="checkbox-inline"  for="passoapasso-0">
+      <input type="checkbox" checked name="passoapasso" value="S">
+      Mostrar passo-a-passo
+    </label><br><br>
     <button id="submit" name="submit" class="btn btn-success">Continuar</button>
+  </div>
+    
 </div>
 
 </fieldset>

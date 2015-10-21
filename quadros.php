@@ -18,6 +18,8 @@ $solucao = 0;
 //1 - indeterminada
 //2 - impossivel
 
+$passoapasso=$_GET['passoapasso'];
+
 
 
 
@@ -67,16 +69,21 @@ do{
 
 	//descobre quem entra e sai da base
 	$etapa++;
-	$conteudo=$conteudo.'<hr><strong><h3 style="text-align:center;">'.$qtderepeticoes.'<sup>a</sup> Iteração</h3></strong>';
-	$conteudo=$conteudo.'<br><h4>Etapa '.$etapa.': Descobrindo quem entra e quem sai da base.</h4>';
-	$conteudo=$conteudo.'<h5 style="color:green;">Quem entra na base?</h5>';
-	$conteudo=$conteudo.'<h5><p><p>O valor mais negativo existente na função objetivo.</p></p></h5>';
-	$conteudo=$conteudo.'<h5 style="color:orange;">Quem sai da base?</h5>';
-	$conteudo=$conteudo.'<h5><p><p>O menor coeficiente da divisão entre a coluna B pela coluna que entrará na base.</p></p></h5>';
+	if ($passoapasso=='S'){
+		$conteudo=$conteudo.'<hr><strong><h3 style="text-align:center;">'.$qtderepeticoes.'<sup>a</sup> Iteração</h3></strong>';
+		$conteudo=$conteudo.'<br><h4>Etapa '.$etapa.': Descobrindo quem entra e quem sai da base.</h4>';
+		$conteudo=$conteudo.'<h5 style="color:green;">Quem entra na base?</h5>';
+		$conteudo=$conteudo.'<h5><p><p>O valor mais negativo existente na função objetivo.</p></p></h5>';
+		$conteudo=$conteudo.'<h5 style="color:orange;">Quem sai da base?</h5>';
+		$conteudo=$conteudo.'<h5><p><p>O menor coeficiente da divisão entre a coluna B pela coluna que entrará na base.</p></p></h5>';
+	}
 
 	
 	$simplex->SetTabela($tabela);
-	$conteudo=$conteudo.$simplex->MostraTabela('12',$qtdecolunas,$qtdelinhas);  
+	$_SESSION['tabelafinal'] = $tabela;
+	if ($passoapasso=='S'){
+		$conteudo=$conteudo.$simplex->MostraTabela('12',$qtdecolunas,$qtdelinhas); 
+	} 
     //pega o menor numero 
   
     $menor=0;
@@ -109,16 +116,19 @@ do{
 
 
 	
-
-	$conteudo=$conteudo.'<h5 style="color:green;><strong>Quem entra na base :</strong>'.$tabela[0][$ColunaDoMenor];
-	$conteudo=$conteudo.'<h5 style="color:orange;><strong>Quem Sai da base :</strong>'.$tabela[$LinhaDoMenor][0];
+	if ($passoapasso=='S'){
+		$conteudo=$conteudo.'<h5 style="color:green;"><strong>Quem entra na base :</strong>'.$tabela[0][$ColunaDoMenor].'</h5>';
+		$conteudo=$conteudo.'<h5 style="color:orange;"><strong>Quem Sai da base :</strong>'.$tabela[$LinhaDoMenor][0].'</h5>';
+		$conteudo=$conteudo.'<h5><strong>Calculos para identificar quem sai da base (menor valor):</strong><br></h5>';
+	}
 	array_push($naobasicas, $tabela[$LinhaDoMenor][0]);
-	$conteudo=$conteudo.'<h5><strong>Calculos para identificar quem sai da base (menor valor):</strong><br>';
+	
 	
    
-
-	for ($i=0; $i < count($contas); $i++) { 
-		$conteudo=$conteudo.'<h5>'.$contas[$i].'<br>';
+	if ($passoapasso=='S'){
+		for ($i=0; $i < count($contas); $i++) { 
+			$conteudo=$conteudo.'<h5>'.$contas[$i].'<br></h5>';
+		}
 	}
 	//$conteudo=$conteudo.'<h5><strong>'..'</strong><br>';
 	
@@ -129,12 +139,16 @@ do{
 ///////////////////////////////////////////////////
 
 
-
-	$etapa++;
-	$conteudo=$conteudo.'<br><h4>Etapa '.$etapa.': Dividindo a linha do pivo.</h4>';
-	$conteudo=$conteudo.'<h5>O encontro da variável que entra na base com a variável que sai da base é denominado pivô. Nesta iteração o valor do pivô é <strong style="color:blue;">'.$pivo.'</strong>;</h5>';
+	if ($passoapasso=='S'){
+				$etapa++;
+				$conteudo=$conteudo.'<br><h4>Etapa '.$etapa.': Dividindo a linha do pivo.</h4>';
+				$conteudo=$conteudo.'<h5>O encontro da variável que entra na base com a variável que sai da base é denominado pivô. Nesta iteração o valor do pivô é <strong style="color:blue;">'.$pivo.'</strong>;</h5>';
+	}
 	$simplex->SetTabela($tabela);
-	$conteudo=$conteudo.$simplex->MostraTabela('12',$qtdecolunas,$qtdelinhas);
+	$_SESSION['tabelafinal'] = $tabela;
+	if ($passoapasso=='S'){
+		$conteudo=$conteudo.$simplex->MostraTabela('12',$qtdecolunas,$qtdelinhas);
+	}
 
 	if ($pivo<=0){
 		$solucao=2;//impossivel
@@ -147,23 +161,32 @@ do{
 		array_push($ValoresLinha,$tabela[$LinhaDoMenor][$coluna]/$pivo);
 	}
 
-    $etapa++;
-	$conteudo=$conteudo.'<br><h4>Etapa '.$etapa.': Dividindo a linha inteira do pivô pelo seu próprio valor.</h4>';
-	$conteudo=$conteudo.'<br><h5> Nesta etapa,são realizadas operações para simplificar a linha inteira do pivô.</h5>';
-						
-	
+
+	if ($passoapasso=='S'){
+	    $etapa++;
+		$conteudo=$conteudo.'<br><h4>Etapa '.$etapa.': Dividindo a linha inteira do pivô pelo seu próprio valor.</h4>';
+		$conteudo=$conteudo.'<br><h5> Nesta etapa,são realizadas operações para simplificar a linha inteira do pivô.</h5>';
+							
+	}	
 	$simplex->SetTabela($tabela);
-	$conteudo=$conteudo.$simplex->MostraTabela('6',$qtdecolunas,$qtdelinhas);
+	$_SESSION['tabelafinal'] = $tabela;
+	if ($passoapasso=='S'){
+	   $conteudo=$conteudo.$simplex->MostraTabela('6',$qtdecolunas,$qtdelinhas);
+    }
 	
 	for ($coluna=1; $coluna < $qtdecolunas; $coluna++) { 
 		$tabela[$LinhaDoMenor][$coluna]= round($ValoresLinha[$coluna-1],1);
 	}
 
 	$simplex->SetTabela($tabela);
+	$_SESSION['tabelafinal'] = $tabela;
 
 	//$conteudo=$conteudo.'<h5> Tabela 1: Efetuando a divisão pelo pivô.</h5>';
-	$conteudo=$conteudo.$simplex->MostraTabela('6',$qtdecolunas,$qtdelinhas);
+	if ($passoapasso=='S'){
+		$conteudo=$conteudo.$simplex->MostraTabela('6',$qtdecolunas,$qtdelinhas);
+	}
 	//$conteudo=$conteudo.'<br><h5> Tabela 2: Divisão efetuada.</h5>';
+	if ($passoapasso=='S'){
 	$conteudo=$conteudo.
 	                    '
 						<div style="text-align:center;margin-top: -30px;">
@@ -177,16 +200,20 @@ do{
 
 
 				$etapa++;
-				$conteudo=$conteudo.'<br><h3>Etapa : '.$etapa.'</h3><h5>Tornar nulo os outros elementos da coluna </h5>';
-
+				$conteudo=$conteudo.'<<h4>Etapa '.$etapa.': Anulando os elementos da coluna do pivo </h4>';
+	}
 				$simplex->SetTabela($tabela);
+				$_SESSION['tabelafinal'] = $tabela;
+
+	if ($passoapasso=='S'){			
+				$conteudo=$conteudo.'<h5>Foram anulados da colunas do pivo os numeros Ignorando o próprio pivo e os zeros. </h5>';
 				$conteudo=$conteudo.
 				'
 				<div style="text-align:center;">
 					<img src="img/seta" style="width:150px;">
 				</div>';
 				$conteudo=$conteudo.$simplex->MostraTabela('6',$qtdecolunas,$qtdelinhas);
-
+	}
 
 				//anular
 				//$anulados= array();
@@ -206,20 +233,15 @@ do{
 
 
 //mostra tabela com valores anulados
-				$simplex->SetTabela($tabela);
+		$simplex->SetTabela($tabela);
+		$_SESSION['tabelafinal'] = $tabela;
+		if ($passoapasso=='S'){
 				$conteudo=$conteudo.$simplex->MostraTabela('6',$qtdecolunas,$qtdelinhas);
 
+		        		$conteudo=$conteudo.'.   ';
+		}
+		        
 
-
-				$conteudo=$conteudo.'<h5><strong>Foram anulados da colunas do pivo os numeros ( ';
-		    
-		        for ($i=0; $i < count($anulados); $i++) { 
-		        	$conteudo=$conteudo.$anulados[$i];
-		        	if ($i<count($anulados)-1){
-		        		$conteudo=$conteudo.'   ;   ';
-		        	}
-		        }
-		        $conteudo=$conteudo.' )  Ignorando o próprio pivo e os zeros. </h5></strong>';
 
 $_SESSION['tabelafinal'] = $tabela;
 
@@ -253,7 +275,17 @@ $_SESSION['tabelafinal'] = $tabela;
 $basicas= array();
 ////MOSTRA O RESULTADO
 switch ($solucao) {
-	case 0 :			
+	case 0 :	
+	  	if ($passoapasso!='S'){
+			$simplex->SetTabela($_SESSION['tabelainicial']);
+			$conteudo=$conteudo.'<h1>Tabela Inicial</h1>';
+			$conteudo=$conteudo.$simplex->MostraTabela('12',$qtdecolunas,$qtdelinhas);
+			$conteudo=$conteudo.'<br><hr><br>';
+			$simplex->SetTabela($_SESSION['tabelafinal']);
+			$conteudo=$conteudo.'<h1>Tabela Final</h1>';
+			$conteudo=$conteudo.$simplex->MostraTabela('12',$qtdecolunas,$qtdelinhas);
+			$conteudo=$conteudo.'<br><hr><br>';
+		}		
 		$conteudo=$conteudo.
 							'
 							<div class="container">
@@ -311,6 +343,17 @@ switch ($solucao) {
 		$_SESSION['tabela']=$tabela;
 		break;
 	case 1 :
+		if ($passoapasso!='S'){
+			$simplex->SetTabela($_SESSION['tabelainicial']);
+			$conteudo=$conteudo.'<h1>Tabela Inicial</h1>';
+			$conteudo=$conteudo.$simplex->MostraTabela('12',$qtdecolunas,$qtdelinhas);
+			$conteudo=$conteudo.'<br><hr><br>';
+			$simplex->SetTabela($_SESSION['tabelafinal']);
+			$conteudo=$conteudo.'<h1>Tabela Final</h1>';
+			$conteudo=$conteudo.$simplex->MostraTabela('12',$qtdecolunas,$qtdelinhas);
+			$conteudo=$conteudo.'<br><hr><br>';
+		}
+
 		 $conteudo=$conteudo.'<div class="container">
 							 	<div class="row">
 										<div class="alert alert-info" role="alert">
@@ -321,6 +364,17 @@ switch ($solucao) {
    							 </div><script>alert("Solução indeterminada !!!!!");</script>';
    	break;
 	default:
+		if ($passoapasso!='S'){
+			$simplex->SetTabela($_SESSION['tabelainicial']);
+			$conteudo=$conteudo.'<h1>Tabela Inicial</h1>';
+			$conteudo=$conteudo.$simplex->MostraTabela('12',$qtdecolunas,$qtdelinhas);
+			$conteudo=$conteudo.'<br><hr><br>';
+			$simplex->SetTabela($_SESSION['tabelafinal']);
+			$conteudo=$conteudo.'<h1>Tabela Final</h1>';
+			$conteudo=$conteudo.$simplex->MostraTabela('12',$qtdecolunas,$qtdelinhas);
+			$conteudo=$conteudo.'<br><hr><br>';
+		}
+
 		$conteudo=$conteudo.'<div class="container">
 							 	<div class="row">
 										<div class="alert alert-danger" role="alert">
