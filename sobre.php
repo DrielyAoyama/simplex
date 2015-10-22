@@ -49,6 +49,16 @@
             <span>implementação de respostas</span><br>
             <span>inicio da implementação da análise de sensibilidade</span><br>
 
+            <h3><span>Versão 1.2</span></h3>
+            <span>adicionado calculo de preço sombra e função de amostragem passo-a-passo</span><br>
+
+             <h3><span>Versão 1.3</span></h3>
+            <span>limites e sombras</span><br>
+
+             <h3><span>Versão 1.4</span></h3>
+            <span>correçao de bug na impressao das tabelas e finalização dos calculos de limites maximos e minimos</span><br>
+
+
     		<strong><h3>Desenvolvido por:</h3>
      	 		<span>Driely Aoyama - 521779</span><br>
      	 		<span>Gustavo Menezes - 515655</span><br>
