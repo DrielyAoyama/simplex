@@ -5,6 +5,9 @@ $tela->SetTitle('Definições-SIMPLEX');
 $tela->SetProjectName('SIMPLEX');
 session_start();
 
+
+//é criado dinimicamente os campos para preennche-los
+
 if (
 	isset($_GET['qtdevariaveis']) and  
 	isset($_GET['qtderestricoes']) and

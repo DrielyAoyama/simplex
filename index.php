@@ -1,5 +1,8 @@
 <?php
 require('view/template.php');
+
+//cria-se objeto da classe template e define a ele o titulo e o conteudo que será impresso
+
 $tela = new template;
 $tela->SetTitle('Configuração');
 $tela->SetProjectName('SIMPLEX');
