@@ -84,32 +84,57 @@ do{
 	if ($passoapasso=='S'){
 		$conteudo=$conteudo.$simplex->MostraTabela('12',$qtdecolunas,$qtdelinhas); 
 	} 
-    //pega o menor numero 
-  
-    $menor=0;
-    $ColunaDoMenor=0;
-    for ($coluna=1; $coluna < $qtdecolunas ; $coluna++) { 
-		if (($tabela[$qtdelinhas-1][$coluna]<$menor) and ($tabela[$qtdelinhas-1][$coluna]<0)){
-			$menor=$tabela[$qtdelinhas-1][$coluna];
-			$ColunaDoMenor=$coluna;
-		}		
-	}
+   
+
+
+////pega o menor valor da linha Z para saber que entra na base
+    $menor = 99999999999;
+    $ColunaDoMenor;
+    for ($coluna=1; $coluna < $qtdecolunas-1 ; $coluna++) { 
+    	if (isset($tabela[$_SESSION['qtdelinhas']-1][$coluna])){
+    		if ($tabela[$_SESSION['qtdelinhas']-1][$coluna]<$menor){
+    			$menor=$tabela[$_SESSION['qtdelinhas']-1][$coluna];
+    			$ColunaDoMenor=$coluna;
+    		}//if ($tabela[$qtdelinhas-1][$coluna]<$menor){
+    	}//if (isset($tabela[$qtdelinhas-1][$coluna])){      ----- isset verifica se a variavel tem valor definido
+    }//for ($coluna=1; $coluna < $qtdecolunas-1 ; $coluna++) { 
+   
+
+
+
+
+
 
     //pega quem sai
+    $impossivel = false;
     $divisao;
     $menor=9999999999;
     $LinhaDoMenor=0;
     $contas=array();
+    $resultadosdivisao=array();
 	for ($linha=1; $linha <$qtdelinhas-1; $linha++) { 
-		if(($tabela[$linha][$qtdecolunas-1]!=0) and ($tabela[$linha][$ColunaDoMenor]!=0)){
+		if(($tabela[$linha][$qtdecolunas-1]>=0) and ($tabela[$linha][$ColunaDoMenor]>0)){
 			$divisao=$tabela[$linha][$qtdecolunas-1]/$tabela[$linha][$ColunaDoMenor];
+			array_push($resultadosdivisao, $tabela[$linha][$qtdecolunas-1]/$tabela[$linha][$ColunaDoMenor]);
 			array_push($contas,$tabela[$linha][$qtdecolunas-1].'/'.$tabela[$linha][$ColunaDoMenor].'='.$tabela[$linha][$qtdecolunas-1]/$tabela[$linha][$ColunaDoMenor]);
 			if($divisao<$menor){
 				$menor=$divisao;
 				$LinhaDoMenor=$linha;
 			}
+			$impossivel = false;
+		}else{
+			$impossivel = true;
 		}
 	}
+
+    ////////para a repeticao caso nao tenha quem sai da base
+	if ($impossivel){
+		$solucao=2;
+		break;
+	}
+
+
+
 
 	$pivo = $tabela[$LinhaDoMenor][$ColunaDoMenor];
 	$naobasicas = array();
@@ -121,15 +146,43 @@ do{
 		$conteudo=$conteudo.'<h5 style="color:orange;"><strong>Quem Sai da base :</strong>'.$tabela[$LinhaDoMenor][0].'</h5>';
 		$conteudo=$conteudo.'<h5><strong>Calculos para identificar quem sai da base (menor valor):</strong><br></h5>';
 	}
+
+
+
 	array_push($naobasicas, $tabela[$LinhaDoMenor][0]);
 	
 	
-   
-	if ($passoapasso=='S'){
+if ($passoapasso=='S'){
 		for ($i=0; $i < count($contas); $i++) { 
 			$conteudo=$conteudo.'<h5>'.$contas[$i].'<br></h5>';
 		}
 	}
+
+
+
+
+ //testa se tem numeros negativos nos resultados das divisoes , se tiver , para a repeticao e define com impossivel  
+ //foi feito desta forma pois se eu colocasse o break dentro do for ele pararia o for e nao do do-while
+	$negativos=0;
+	for ($i=0; $i < count($resultadosdivisao); $i++) { 
+		if ($resultadosdivisao[$i]>0){
+		   $negativos++;
+		}
+	}
+
+	if ($negativos<0){
+		$solucao=2;
+		break;
+	}
+	//testa se tem numeros negativos nos resultados das divisoes , se tiver , para a repeticao e define com impossivel  
+
+
+
+
+
+
+
+	
 	//$conteudo=$conteudo.'<h5><strong>'..'</strong><br>';
 	
 	//entra e sai da base
@@ -150,7 +203,7 @@ do{
 		$conteudo=$conteudo.$simplex->MostraTabela('12',$qtdecolunas,$qtdelinhas);
 	}
 
-	if ($pivo<=0){
+	if ($pivo==0){
 		$solucao=2;//impossivel
 		break;
 	}
@@ -200,7 +253,7 @@ do{
 
 
 				$etapa++;
-				$conteudo=$conteudo.'<<h4>Etapa '.$etapa.': Anulando os elementos da coluna do pivo </h4>';
+				$conteudo=$conteudo.'<h4>Etapa '.$etapa.': Anulando os elementos da coluna do pivo </h4>';
 	}
 				$simplex->SetTabela($tabela);
 				$_SESSION['tabelafinal'] = $tabela;
@@ -216,20 +269,38 @@ do{
 	}
 
 				//anular
-				//$anulados= array();
-				$aux = 0;
-				for ($linha=1; $linha < $qtdelinhas ; $linha++) { 						
-						if (($tabela[$linha][$ColunaDoMenor]!=0) and ($linha!=$LinhaDoMenor)){
-							$anulados[$aux]=$tabela[$linha][$ColunaDoMenor];
-							$aux++; 
-							$ValorQueVaiSerAnulado = ($tabela[$linha][$ColunaDoMenor])*-1;
-							for ($coluna=1; $coluna < $qtdecolunas; $coluna++) { 
-								$ValorLinhaDeCima = $tabela[$LinhaDoMenor][$coluna];							
-								$ValorLinhaDeBaixo = $tabela[$linha][$coluna];
-								$tabela[$linha][$coluna]=($ValorLinhaDeCima*$ValorQueVaiSerAnulado+$ValorLinhaDeBaixo);	
+				//$anu
+
+
+	//aqui aqui
+				$linha=1;
+				for ($coluna=1; $coluna <  $qtdecolunas; $coluna++) { 
+				
+				    if (isset($tabela[$linha][$ColunaDoMenor])){					
+							if (($tabela[$linha][$ColunaDoMenor]!=0) or ($linha!=$LinhaDoMenor)){   //nao zero e nao pivo
+								$ValorQueVaiSerAnulado = ($tabela[$linha][$ColunaDoMenor])*-1;
+								for (; $linha <= $qtdelinhas ; $linha++) { 	
+									if (isset($tabela[$linha][$coluna])){
+										$ValorLinhaDeCima = $tabela[$LinhaDoMenor][$coluna];							
+										$ValorLinhaDeBaixo = $tabela[$linha][$coluna];
+										$tabela[$linha][$coluna]=($ValorLinhaDeCima*$ValorQueVaiSerAnulado)+$ValorLinhaDeBaixo;	
+									}//if (isset($tabela[$linha][$coluna])){
+								}//for ($linha=1; $linha <= $qtdelinhas ; $linha++) { 	
+
+							}else{//if (($tabela[$linha][$ColunaDoMenor]!=0) or ($linha!=$LinhaDoMenor)){   //nao zero e nao pivo
+								$linha++;
+								for (; $linha <= $qtdelinhas ; $linha++) { 	
+									if (isset($tabela[$linha][$coluna])){
+										$ValorLinhaDeCima = $tabela[$LinhaDoMenor][$coluna];							
+										$ValorLinhaDeBaixo = $tabela[$linha][$coluna];
+										$tabela[$linha][$coluna]=($ValorLinhaDeCima*$ValorQueVaiSerAnulado)+$ValorLinhaDeBaixo;	
+									}
 								}
-						}
-				}
+							}
+					}// if (isset($tabela[$linha][$ColunaDoMenor])){		
+				}//for ($coluna=1; $coluna <  $qtdecolunas; $coluna++) { 
+
+//aqui aqui
 
 
 //mostra tabela com valores anulados
@@ -273,6 +344,10 @@ $_SESSION['tabelafinal'] = $tabela;
 
 
 $basicas= array();
+
+
+
+//DEFINE OS RESULTADOS E DEVE-SE PARAR A REPETICAO COM UM BREAK QUANDO ALGUMA CONDICAO FOR TESTADA POSITIVAMENTE
 ////MOSTRA O RESULTADO
 switch ($solucao) {
 	case 0 :	
@@ -379,7 +454,6 @@ switch ($solucao) {
 							 	<div class="row">
 										<div class="alert alert-danger" role="alert">
 								        	<strong>Solução impossivel !!!!!!!!!</strong>
-								        	<strong>Pivo encontrado é igual a zero</strong>
 								        </div>
    								</div>
    							 </div><script>alert("Solução impossivel !!!!!");</script>';
