@@ -62,6 +62,7 @@ class template{
 			          <ul class="nav navbar-nav">
 			            <li class="active"><a href="index.php">Início</a></li>
 			            <li><a href="sobre.php">Sobre</a></li>
+			             <li><a href="notaliberacaopo-simplex.docx">Nota de Liberação</a></li>
 			          </ul>
 			        </div>
 			      </div>

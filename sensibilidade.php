@@ -162,14 +162,14 @@ for ($coluna=($_SESSION['qtdevariaveis']+1); $coluna < ($_SESSION['qtdecolunas']
         $b = ($tabelafinal[$linha][$_SESSION['qtdecolunas']-1]);
         $f =  ($tabelafinal[$linha][$coluna]);
         $vlrb = $tabelainicial[$aux2][$_SESSION['qtdecolunas']-1]; 
-        //escreve o resultado do calculo arredondando com 2 casas após a virgula
+        //escreve o resultado do calculo arredon
+   
+    $conteudo=$conteudo.'<strong>Minimo :'.$lmin[$aux].'</strong><br>';
+    $conteudo=$conteudo.'<strong>Máximo :dando com 2 casas após a virgula
         //este calculo é apenas vizualização, o valor foi armazenado no array $deltas na linha 124
         $conteudo=$conteudo.($b*-1).' /  '.$f.' + '.$vlrb.' = '.  (round(((($b*-1)/$f)),2)+$vlrb).'<br>';
       }      
-    }
-   
-    $conteudo=$conteudo.'<strong>Minimo :'.$lmin[$aux].'</strong><br>';
-    $conteudo=$conteudo.'<strong>Máximo :'.$lmax[$aux].'</strong><br>';
+    }'.$lmax[$aux].'</strong><br>';
     $conteudo=$conteudo.'<br><hr>';
     $aux++;    
     $aux2++;
