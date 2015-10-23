@@ -274,7 +274,9 @@ if ($passoapasso=='S'){
 $simplex->SetTabela($tabela);
 $tabela = $simplex->MostraColunaDoPivoAnulada($tabela,$LinhaDoMenor,$ColunaDoMenor);
 $simplex->SetTabela($tabela);
-$conteudo=$conteudo.$simplex->MostraTabela('6',$qtdecolunas,$qtdelinhas);
+if ($passoapasso=='S'){
+	$conteudo=$conteudo.$simplex->MostraTabela('6',$qtdecolunas,$qtdelinhas);
+}
 //aqui aqui
 
 
