@@ -319,7 +319,7 @@ $_SESSION['tabelafinal'] = $tabela;
 	}
 	$qtderepeticoes++;
 	$etapa =0;
-}while($qtderepeticoes<=10);
+}while($qtderepeticoes<=2);
 
 
 
