@@ -284,7 +284,6 @@ $conteudo=$conteudo.$simplex->MostraTabela('6',$qtdecolunas,$qtdelinhas);
 
 
 
-
 //mostra tabela com valores anulados
 		$_SESSION['tabelafinal'] = $tabela;
 		if ($passoapasso=='S'){

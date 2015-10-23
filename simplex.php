@@ -10,6 +10,8 @@ class Simplex{
 	}
 
 	public function MostraTabela($tamanho,$qtdecolunas,$qtdelinhas){
+		$_SESSION['qtdelinhas']=$qtdelinhas;
+		$_SESSION['qtdecolunas']=$qtdecolunas;
 		$conteudo='';
 		if($tamanho==12){
 			$conteudo=$conteudo.'<div class="row"><div class="col-lg-12">';
@@ -55,6 +57,7 @@ class Simplex{
 		$pivonegativo = ($tabela[$linha][$coluna])*-1;
 		$Linhadopivo = $linha;
 		$colunadopivo = $coluna;
+
 
 		for ($linha=1; $linha < $_SESSION['qtdelinhas'] ; $linha++) { 
 			if (isset($tabela[$linha][0])){//apenas validacao
