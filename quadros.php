@@ -90,13 +90,13 @@ do{
 ////pega o menor valor da linha Z para saber que entra na base
     $menor = 99999999999;
     $ColunaDoMenor;
-    for ($coluna=1; $coluna < $qtdecolunas-1 ; $coluna++) { 
-    	if (isset($tabela[$_SESSION['qtdelinhas']-1][$coluna])){
-    		if ($tabela[$_SESSION['qtdelinhas']-1][$coluna]<$menor){
-    			$menor=$tabela[$_SESSION['qtdelinhas']-1][$coluna];
+    for ($coluna=1; $coluna < $qtdecolunas ; $coluna++) { 
+    	//if (isset($tabela[$_SESSION['qtdelinhas']][$coluna])){
+    		if ($tabela[$qtdelinhas-1][$coluna]<$menor){
+    			$menor=$tabela[$qtdelinhas-1][$coluna];
     			$ColunaDoMenor=$coluna;
     		}//if ($tabela[$qtdelinhas-1][$coluna]<$menor){
-    	}//if (isset($tabela[$qtdelinhas-1][$coluna])){      ----- isset verifica se a variavel tem valor definido
+    	//}//if (isset($tabela[$qtdelinhas-1][$coluna])){      ----- isset verifica se a variavel tem valor definido
     }//for ($coluna=1; $coluna < $qtdecolunas-1 ; $coluna++) { 
    
 
@@ -106,7 +106,7 @@ do{
 
 
     //pega quem sai
-    $impossivel = false;
+    $impossivel = true;
     $divisao;
     $menor=9999999999;
     $LinhaDoMenor=0;
@@ -122,8 +122,6 @@ do{
 				$LinhaDoMenor=$linha;
 			}
 			$impossivel = false;
-		}else{
-			$impossivel = true;
 		}
 	}
 
@@ -414,7 +412,7 @@ switch ($solucao) {
 							 	<div class="row">
 										<div class="alert alert-info" role="alert">
 								        	<strong>Solução indeterminada !!!!!!</strong>
-								        	<strong>O limite de 10 repetições se excedeu sem nenhum resultado</strong>
+								        	<strong>Dentro do limite de repetições não foi possivel positivar Z</strong>
 								        </div>
    								</div>
    							 </div><script>alert("Solução indeterminada !!!!!");</script>';
