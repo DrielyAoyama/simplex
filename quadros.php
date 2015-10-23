@@ -70,7 +70,7 @@ do{
 	//descobre quem entra e sai da base
 	$etapa++;
 	if ($passoapasso=='S'){
-		$conteudo=$conteudo.'<hr><strong><h3 style="text-align:center;">'.$qtderepeticoes.'<sup>a</sup> Iteração</h3></strong>';
+		$conteudo=$conteudo.'<strong><h3 style="text-align:center;">'.$qtderepeticoes.'<sup>a</sup> Iteração</h3></strong>';
 		$conteudo=$conteudo.'<br><h4>Etapa '.$etapa.': Descobrindo quem entra e quem sai da base.</h4>';
 		$conteudo=$conteudo.'<h5 style="color:green;">Quem entra na base?</h5>';
 		$conteudo=$conteudo.'<h5><p><p>O valor mais negativo existente na função objetivo.</p></p></h5>';
@@ -268,48 +268,29 @@ if ($passoapasso=='S'){
 				$conteudo=$conteudo.$simplex->MostraTabela('6',$qtdecolunas,$qtdelinhas);
 	}
 
-				//anular
-				//$anu
+		
 
 
-	//aqui aqui
-				$linha=1;
-				for ($coluna=1; $coluna <  $qtdecolunas; $coluna++) { 
-				
-				    if (isset($tabela[$linha][$ColunaDoMenor])){					
-							if (($tabela[$linha][$ColunaDoMenor]!=0) or ($linha!=$LinhaDoMenor)){   //nao zero e nao pivo
-								$ValorQueVaiSerAnulado = ($tabela[$linha][$ColunaDoMenor])*-1;
-								for (; $linha <= $qtdelinhas ; $linha++) { 	
-									if (isset($tabela[$linha][$coluna])){
-										$ValorLinhaDeCima = $tabela[$LinhaDoMenor][$coluna];							
-										$ValorLinhaDeBaixo = $tabela[$linha][$coluna];
-										$tabela[$linha][$coluna]=($ValorLinhaDeCima*$ValorQueVaiSerAnulado)+$ValorLinhaDeBaixo;	
-									}//if (isset($tabela[$linha][$coluna])){
-								}//for ($linha=1; $linha <= $qtdelinhas ; $linha++) { 	
-
-							}else{//if (($tabela[$linha][$ColunaDoMenor]!=0) or ($linha!=$LinhaDoMenor)){   //nao zero e nao pivo
-								$linha++;
-								for (; $linha <= $qtdelinhas ; $linha++) { 	
-									if (isset($tabela[$linha][$coluna])){
-										$ValorLinhaDeCima = $tabela[$LinhaDoMenor][$coluna];							
-										$ValorLinhaDeBaixo = $tabela[$linha][$coluna];
-										$tabela[$linha][$coluna]=($ValorLinhaDeCima*$ValorQueVaiSerAnulado)+$ValorLinhaDeBaixo;	
-									}
-								}
-							}
-					}// if (isset($tabela[$linha][$ColunaDoMenor])){		
-				}//for ($coluna=1; $coluna <  $qtdecolunas; $coluna++) { 
-
+//aqui anula a coluna do pivo, usuando a funçao MostraColunaDoPivoAnulada que esta no arquivo
+//simplex.php
+$simplex->SetTabela($tabela);
+$tabela = $simplex->MostraColunaDoPivoAnulada($tabela,$LinhaDoMenor,$ColunaDoMenor);
+$simplex->SetTabela($tabela);
+$conteudo=$conteudo.$simplex->MostraTabela('6',$qtdecolunas,$qtdelinhas);
 //aqui aqui
 
 
+
+
+
+
+
+
+
 //mostra tabela com valores anulados
-		$simplex->SetTabela($tabela);
 		$_SESSION['tabelafinal'] = $tabela;
 		if ($passoapasso=='S'){
-				$conteudo=$conteudo.$simplex->MostraTabela('6',$qtdecolunas,$qtdelinhas);
-
-		        		$conteudo=$conteudo.'.   ';
+		    $conteudo=$conteudo.'.   ';
 		}
 		        
 

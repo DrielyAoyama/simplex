@@ -51,7 +51,28 @@ class Simplex{
 
 
 
+	public function MostraColunaDoPivoAnulada($tabela,$linha,$coluna){
+		$pivonegativo = ($tabela[$linha][$coluna])*-1;
+		$Linhadopivo = $linha;
+		$colunadopivo = $coluna;
 
+		for ($linha=1; $linha < $_SESSION['qtdelinhas'] ; $linha++) { 
+			if (isset($tabela[$linha][0])){//apenas validacao
+				$anular = ($tabela[$linha][$colunadopivo])*-1;
+				 //quem vai ser anulado	
+					for ($coluna=1; $coluna < $_SESSION['qtdecolunas']; $coluna++) { 						
+						if (isset($tabela[$Linhadopivo][$coluna])){  //apenas validacao							
+							$a=$tabela[$Linhadopivo][$coluna];
+							$b=$tabela[$linha][$coluna];
+							if($linha!=$Linhadopivo){
+								$tabela[$linha][$coluna]=($a * ($anular) + $b);   //linha do pivo * numero que esta sendo anulado*(-1)+linha do que esta sendo anulado
+							}
+						}//if (isset($tabela[$Linhadopivo][$coluna])){
+					}//for ($coluna=1; $coluna < $_SESSION['qtdecolunas']; $coluna++) { 
+			}//if (isset($tabela[$linha][0])){//apenas validacao
+		}//for ($linha=1; $linha < $_SESSION['qtdelinhas'] ; $linha++) { 
+		return $tabela;
+	}
 
 
 
